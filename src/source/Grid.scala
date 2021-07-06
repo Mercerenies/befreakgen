@@ -25,10 +25,10 @@ class Grid[+A](val default: A, val impl: HashMap[Pos, A] = HashMap()):
     Grid(default, impl.merged(other) { (_, rhs) => rhs })
 
   def upperLeft: Pos =
-    impl.keys.fold(Pos.Zero)(Pos.min)
+    impl.keys.fold(Pos.zero)(Pos.min)
 
   def lowerRight: Pos =
-    impl.keys.fold(Pos.Zero)(Pos.max) + Pos(1, 1)
+    impl.keys.fold(Pos.zero)(Pos.max) + Pos(1, 1)
 
   def rotateRight: Grid[A] =
     Grid(default, impl map { (k, v) => (Pos(- k.y, k.x), v) })
@@ -71,6 +71,9 @@ object Grid:
     Grid(default)
 
   def singleton[A](default: A, value: A): Grid[A] =
-    Grid(default, HashMap(Pos.Zero -> value))
+    Grid(default, HashMap(Pos.zero -> value))
+
+  def fromRows[A](default: A, rows: Seq[Seq[A]]): Grid[A] =
+    rows.map { hstrip(default, _) }.fold(empty(default)) { _ hcat _ }
 
 end Grid

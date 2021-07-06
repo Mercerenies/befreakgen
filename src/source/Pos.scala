@@ -20,7 +20,7 @@ end Pos
 
 object Pos:
 
-  val Zero = Pos(0, 0)
+  val zero = Pos(0, 0)
 
   def min(a: Pos, b: Pos) =
     Pos(math.min(a.x, b.x), math.min(a.y, b.y))
