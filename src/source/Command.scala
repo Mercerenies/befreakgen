@@ -24,4 +24,8 @@ object Command:
   def pushNumber(n: Int): Grid[Instruction] =
     Grid.singleton(Instruction.Space, Instruction.PushZero) hcat xorNumber(n)
 
+  def thenPrint: Grid[Instruction] =
+    Grid.fromRows(' ', List(raw"(ovs's[)84+84 01%01(v):v `w]v)", raw"  \c=c(=)           /  \=(=)/")).
+      map { Instruction(_) }
+
 end Command

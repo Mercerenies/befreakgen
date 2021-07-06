@@ -14,6 +14,9 @@ class Grid[+A](val default: A, val impl: HashMap[Pos, A] = HashMap()):
   def filter(pred: ((Pos, A)) => Boolean): Grid[A] =
     Grid(default, impl filter pred)
 
+  def map[B](f: (A) => B): Grid[B] =
+    Grid(f(default), impl map { (k, v) => (k, f(v)) })
+
   def shift(pos: Pos): Grid[A] =
     Grid(default, impl map { (k, v) => (k + pos, v) })
 
@@ -28,7 +31,7 @@ class Grid[+A](val default: A, val impl: HashMap[Pos, A] = HashMap()):
     impl.keys.fold(Pos.zero)(Pos.min)
 
   def lowerRight: Pos =
-    impl.keys.fold(Pos.zero)(Pos.max) + Pos(1, 1)
+    impl.keys.fold(Pos(-1, -1))(Pos.max) + Pos(1, 1)
 
   def rotateRight: Grid[A] =
     Grid(default, impl map { (k, v) => (Pos(- k.y, k.x), v) })
@@ -74,6 +77,6 @@ object Grid:
     Grid(default, HashMap(Pos.zero -> value))
 
   def fromRows[A](default: A, rows: Seq[Seq[A]]): Grid[A] =
-    rows.map { hstrip(default, _) }.fold(empty(default)) { _ hcat _ }
+    rows.map { hstrip(default, _) }.fold(empty(default)) { _ vcat _ }
 
 end Grid
