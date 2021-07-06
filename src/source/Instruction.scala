@@ -3,7 +3,9 @@ package com.mercerenies.befreak
 package source
 
 case class Instruction(val representation: Char):
+
   override def toString: String = representation.toString
+
 end Instruction
 
 object Instruction:
@@ -50,4 +52,12 @@ object Instruction:
   def Down = Instruction('v')
   def Up = Instruction('^')
   def Space = Instruction(' ')
+
+  extension (c: Char | Instruction) def toInstruction = c match
+    case (c : Char) => Instruction(c)
+    case (c: Instruction) => c
+
+  given Conversion[Instruction, Grid[Instruction]] with
+    def apply(i: Instruction) = Grid.singleton(Instruction.Space, i)
+
 end Instruction

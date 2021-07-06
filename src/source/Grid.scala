@@ -51,6 +51,8 @@ class Grid[+A](val default: A, val impl: HashMap[Pos, A] = HashMap()):
   def vcat[B](that: Grid[B]): Grid[A | B] =
     this.insert(that, Pos(this.upperLeft.x - that.upperLeft.x, this.lowerRight.y - that.upperLeft.y))
 
+  def ++[B](that: Grid[B]) = this hcat that
+
   override def toString: String =
     val upperLeft = this.upperLeft
     val lowerRight = this.lowerRight
