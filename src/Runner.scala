@@ -7,7 +7,7 @@ import java.nio.file.Path
 
 object Runner:
 
-  val path = "~/Documents/eulers-melting-pot/vendor/befreak/bfi"
+  val path = "/home/silvio/Documents/eulers-melting-pot/vendor/befreak/bfi"
 
   def runFile(filename: String | Path): String =
     s"$path $filename".!!
@@ -16,7 +16,7 @@ object Runner:
     Temporary.withTmp("__befreak_", ".tmp") { (path) =>
       val bw = BufferedWriter(FileWriter(path.toFile))
       try
-        bw.write(code)
+        bw.write(code + "\n")
       finally
         bw.close()
       runFile(path)
