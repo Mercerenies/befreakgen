@@ -21,6 +21,10 @@ object Command:
 
   def hstrip(seq: Seq[Instruction | Char]) = Grid.hstrip(Instruction.Space, seq map { _.toInstruction })
 
+  def empty = Grid.empty(Instruction.Space)
+
+  def padding = singleton(Instruction.Space)
+
   def xorNumber(n: Int): Grid[Instruction] =
     if n < 0 then
       throw Exception("Cannot currently handle negative numbers")
