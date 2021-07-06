@@ -70,7 +70,7 @@ object Grid:
   def empty[A](default: A): Grid[A] =
     Grid(default)
 
-  def singleton[A](default: A): Grid[A] =
-    Grid(default, HashMap(Pos.Zero -> default))
+  def singleton[A](default: A, value: A): Grid[A] =
+    Grid(default, HashMap(Pos.Zero -> value))
 
 end Grid
