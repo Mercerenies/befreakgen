@@ -6,6 +6,46 @@ case class Instruction(val representation: Char):
 
   override def toString: String = representation.toString
 
+  def rotateLeft: Instruction =
+    Instruction(representation match
+      case '<' => 'v'
+      case 'v' => '>'
+      case '>' => '^'
+      case '^' => '<'
+      case '\\' => '/'
+      case '/' => '\\'
+      case ch => ch)
+
+  def rotateRight: Instruction =
+    Instruction(representation match
+      case '<' => '^'
+      case 'v' => '<'
+      case '>' => 'v'
+      case '^' => '>'
+      case '\\' => '/'
+      case '/' => '\\'
+      case ch => ch)
+
+  def mirror: Instruction =
+    Instruction(representation match
+      case '<' => '>'
+      case 'v' => 'v'
+      case '>' => '<'
+      case '^' => '^'
+      case '\\' => '/'
+      case '/' => '\\'
+      case ch => ch)
+
+  def flip: Instruction =
+    Instruction(representation match
+      case '<' => '<'
+      case 'v' => '^'
+      case '>' => '>'
+      case '^' => 'v'
+      case '\\' => '/'
+      case '/' => '\\'
+      case ch => ch)
+
 end Instruction
 
 object Instruction:
@@ -59,5 +99,15 @@ object Instruction:
 
   given Conversion[Instruction, Grid[Instruction]] with
     def apply(i: Instruction) = Grid.singleton(Instruction.Space, i)
+
+  extension (grid: Grid[Instruction])
+
+    def rotateLeft: Grid[Instruction] = grid.rawRotateLeft.map(_.rotateLeft)
+
+    def rotateRight: Grid[Instruction] = grid.rawRotateRight.map(_.rotateRight)
+
+    def mirror: Grid[Instruction] = grid.rawMirror.map(_.mirror)
+
+    def flip: Grid[Instruction] = grid.rawFlip.map(_.flip)
 
 end Instruction

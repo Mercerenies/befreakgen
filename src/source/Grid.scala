@@ -20,6 +20,9 @@ class Grid[+A](val default: A, val impl: HashMap[Pos, A] = HashMap()):
   def shift(pos: Pos): Grid[A] =
     Grid(default, impl map { (k, v) => (k + pos, v) })
 
+  def anchor: Grid[A] =
+    this shift (- upperLeft)
+
   def slice(upperLeft: Pos, lowerRight: Pos): Grid[A] =
     this filter { (k, _) => k.in(upperLeft, lowerRight) } shift upperLeft
 
@@ -33,16 +36,16 @@ class Grid[+A](val default: A, val impl: HashMap[Pos, A] = HashMap()):
   def lowerRight: Pos =
     impl.keys.fold(Pos(-1, -1))(Pos.max) + Pos(1, 1)
 
-  def rotateRight: Grid[A] =
+  def rawRotateRight: Grid[A] =
     Grid(default, impl map { (k, v) => (Pos(- k.y, k.x), v) })
 
-  def rotateLeft: Grid[A] =
+  def rawRotateLeft: Grid[A] =
     Grid(default, impl map { (k, v) => (Pos(k.y, - k.x), v) })
 
-  def mirror: Grid[A] =
+  def rawMirror: Grid[A] =
     Grid(default, impl map { (k, v) => (Pos(- k.x, k.y), v) })
 
-  def flip: Grid[A] =
+  def rawFlip: Grid[A] =
     Grid(default, impl map { (k, v) => (Pos(k.x, - k.y), v) })
 
   def hcat[B](that: Grid[B]): Grid[A | B] =
@@ -70,7 +73,7 @@ object Grid:
     Grid(default, HashMap.from(0 until values.length map { Pos(_, 0) } zip values))
 
   def vstrip[A](default: A, values: Seq[A]): Grid[A] =
-    hstrip(default, values).rotateRight
+    hstrip(default, values).rawRotateRight
 
   def empty[A](default: A): Grid[A] =
     Grid(default)
