@@ -7,4 +7,6 @@ import scala.collection.immutable.HashMap
 
 object test:
   def main(args: Array[String]) =
-    println(Command.pushNumber(93))
+    val code = Grid.singleton(Instruction.Space, Instruction.Halt) hcat Command.pushNumber(93) hcat Command.thenPrint
+    println(code)
+    println(Runner.runCode(code.toString))
