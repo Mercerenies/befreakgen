@@ -55,6 +55,18 @@ object ControlFlow:
       ) ++
       Instruction.PopZero
 
+  // General-purpose if statement. If the value at the top of the
+  // control stack is 1, runs the first block. If it's 0, runs the
+  // second. The "control value" at the top of the control stack will
+  // not be present during block execution, but it will be returned at
+  // the end when the branch coalesces.
+  def ifStmt(trueCase: Grid[Instruction], falseCase: Grid[Instruction]): Grid[Instruction] =
+    val trueHeight = trueCase.height
+    val center = falseCase vcat Command.padding vcat trueCase
+    val lhs = Command.hstrip("\\/") vcat Command.padding.repeat(trueHeight - 1).rotateRight vcat Command.hstrip("\\<") vcat Command.hstrip(" \\")
+    val rhs = Command.hstrip("\\/") vcat Command.padding.repeat(trueHeight - 1).rotateRight vcat Command.hstrip(">/") vcat Command.hstrip("/ ")
+    lhs hcat center hcat rhs
+
   // Runs setup, then work, then setup in reverse. When setup runs,
   // there will be a single additional value on top of the control
   // stack, which should not be manipulated.
