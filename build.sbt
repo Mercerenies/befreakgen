@@ -5,7 +5,7 @@ lazy val root = (project in file("."))
       organization := "com.mercerenies.befreak",
       scalaVersion := "3.0.0"
     )),
-    name := "stacked"
+    name := "befreakgen"
   )
 
 Compile / unmanagedSourceDirectories += baseDirectory.value / "src"

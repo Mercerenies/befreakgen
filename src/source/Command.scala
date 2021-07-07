@@ -4,6 +4,7 @@ package source
 
 import Instruction.toInstruction
 
+import scala.language.implicitConversions
 import scala.annotation.tailrec
 
 object Command:
@@ -21,6 +22,8 @@ object Command:
 
   def hstrip(seq: Seq[Instruction | Char]) = Grid.hstrip(Instruction.Space, seq map { _.toInstruction })
 
+  def vstrip(seq: Seq[Instruction | Char]) = Grid.vstrip(Instruction.Space, seq map { _.toInstruction })
+
   def empty = Grid.empty(Instruction.Space)
 
   def padding = singleton(Instruction.Space)
@@ -33,6 +36,9 @@ object Command:
 
   def pushNumber(n: Int): Grid[Instruction] =
     singleton(Instruction.PushZero) hcat xorNumber(n)
+
+  def equalToZero: Grid[Instruction] =
+    Instruction.PushZero ++ Instruction.Equal ++ Instruction.PopZero
 
   def thenPrint: Grid[Instruction] =
     Grid.fromRows(' ', List(raw"(ovs's[)84+84 01%01(v):v `w]v)", raw"  \c=c(=)           /  \=(=)/")).

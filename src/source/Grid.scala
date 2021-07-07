@@ -36,6 +36,12 @@ class Grid[+A](val default: A, val impl: HashMap[Pos, A] = HashMap()):
   def lowerRight: Pos =
     impl.keys.fold(Pos(-1, -1))(Pos.max) + Pos(1, 1)
 
+  def width: Int =
+    lowerRight.x - upperLeft.x
+
+  def height: Int =
+    lowerRight.y - upperLeft.y
+
   def rawRotateRight: Grid[A] =
     Grid(default, impl map { (k, v) => (Pos(- k.y, k.x), v) })
 
