@@ -22,6 +22,14 @@ object Algorithm:
       Instruction.MainToCtrl.repeat(2) ++ Instruction.Dup ++ Instruction.CtrlToMain.repeat(2)
     ) ++ Stack.moveToTop(2)
 
+  // Takes two values on top of the stack. Puts lcm on top, leaves the
+  // existing two values alone.
+  def lcm: Grid[Instruction] =
+    ControlFlow.withReversed(
+      gcd ++ Instruction.MainToCtrl ++ Instruction.PushZero ++ Instruction.Swap ++ Instruction.Mul ++ Instruction.Swap ++ Instruction.CtrlToMain ++ Instruction.Div,
+      Stack.copyToTop(2) ++ Stack.buryNDown(4),
+    ) ++ Stack.moveToTop(2)
+
   // The whole program. Starts with @, runs once, and then terminates safely
   def program(body: Grid[Instruction]): Grid[Instruction] =
     val fullBody = Command.padding vcat body
