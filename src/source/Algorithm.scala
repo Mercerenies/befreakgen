@@ -17,7 +17,7 @@ object Algorithm:
         ControlFlow.generalLoop(
           Instruction.Equal,
           Command.equalToZero,
-          Instruction.Swapd ++ Instruction.Div ++ Instruction.Dig ++ Instruction.CtrlToMain ++ Instruction.Swap ++ Instruction.MainToCtrl.repeat(2) ++ Instruction.Bury,
+          Instruction.Swapd ++ Instruction.Div ++ Instruction.Dig ++ Command.mainToCtrlDown ++ Instruction.Bury,
         ),
       Instruction.MainToCtrl.repeat(2) ++ Instruction.Dup ++ Instruction.CtrlToMain.repeat(2)
     ) ++ Stack.moveToTop(2)
@@ -38,10 +38,35 @@ object Algorithm:
         ControlFlow.generalLoop(
           Stack.buryNDown(3) ++ Instruction.Swapd ++ Instruction.Equal ++ Instruction.Swapd ++ Stack.moveToTop(3),
           Stack.buryNDown(3) ++ Instruction.Swap ++ Instruction.Div ++ Instruction.Swap ++ Command.equalToZero ++ Instruction.ToggleCtrl ++ Instruction.Swap ++ Instruction.Mul ++ Instruction.Swap ++ Stack.moveToTop(3),
-          Instruction.Increment ++ Stack.buryNDown(3) ++ Instruction.Swap ++ Instruction.Div ++ Instruction.Swap ++ Instruction.CtrlToMain ++ Instruction.Swap ++ Instruction.MainToCtrl.repeat(2) ++ Instruction.Swap ++ Stack.moveToTop(3),
+          Instruction.Increment ++ Stack.buryNDown(3) ++ Instruction.Swap ++ Instruction.Div ++ Instruction.Swap ++ Command.mainToCtrlDown ++ Instruction.Swap ++ Stack.moveToTop(3),
         ),
       Instruction.Dup ++ Stack.buryNDown(4),
     ) ++ Stack.moveToTop(2)
+
+  // Given I on top of the stack, find the smallest positive X such
+  // that 10^X mod I = 1. Pushes the result onto the stack
+  def a006556: Grid[Instruction] =
+    ControlFlow.withReversed(
+      Command.pushNumber(10) ++ Instruction.Swap ++ Instruction.Div ++ Stack.moveToTop(2) ++ Command.mainToCtrlDown ++ Command.pushNumber(1) ++
+        ControlFlow.generalLoop(
+          Command.pushNumber(1) ++ Instruction.Equal ++ Command.popNumber(1),
+          Instruction.Dig ++ Command.pushNumber(1) ++ Instruction.Equal ++ Command.popNumber(1) ++ Instruction.Bury,
+          Instruction.Dig ++ Instruction.PushZero ++ Command.pushNumber(10) ++ Instruction.Mul ++ Command.popNumber(10) ++ Instruction.Dig ++ Instruction.Div ++ Instruction.Dig ++ Command.mainToCtrlDown ++ Instruction.Dig ++ Instruction.Increment,
+        ),
+      Instruction.Dup ++ Stack.buryNDown(3)
+    ) ++ Instruction.Swap
+
+  // Given I on top of the stack (assuming I is prime and not 2 or 5;
+  // precondition not checked), produce A(I).
+  def primeA: Grid[Instruction] =
+    ControlFlow.withReversed(
+      Instruction.PushZero ++ Instruction.MainToCtrl ++ Command.pushNumber(3) ++ Instruction.Equal ++ Command.popNumber(3) ++
+        ControlFlow.ifStmt(
+          Command.pushNumber(3),
+          a006556,
+        ) ++ Instruction.CtrlToMain.repeat(2) ++ Instruction.Swap ++ Instruction.MainToCtrl.repeat(2),
+      Instruction.Dup ++ Instruction.Bury,
+    ) ++ Instruction.Swap
 
   // The whole program. Starts with @, runs once, and then terminates safely
   def program(body: Grid[Instruction]): Grid[Instruction] =

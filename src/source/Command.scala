@@ -9,6 +9,8 @@ import scala.annotation.tailrec
 
 object Command:
 
+  import ControlFlow.repeat
+
   def digits(n: Int): List[Int] =
     @tailrec
     def _rec(m: Int, acc: List[Int]): List[Int] =
@@ -37,11 +39,17 @@ object Command:
   def pushNumber(n: Int): Grid[Instruction] =
     singleton(Instruction.PushZero) hcat xorNumber(n)
 
+  def popNumber(n: Int): Grid[Instruction] =
+    xorNumber(n) hcat singleton(Instruction.PopZero)
+
   def equalToZero: Grid[Instruction] =
     Instruction.PushZero ++ Instruction.Equal ++ Instruction.PopZero
 
   def dip(inner: Grid[Instruction]): Grid[Instruction] =
     Instruction.MainToCtrl ++ inner ++ Instruction.CtrlToMain
+
+  def mainToCtrlDown: Grid[Instruction] =
+    Instruction.CtrlToMain ++ Instruction.Swap ++ Instruction.MainToCtrl.repeat(2)
 
   def thenPrint: Grid[Instruction] =
     Grid.fromRows(' ', List(raw"(ovs's[)84+84 01%01(v):v `w]v)", raw"  \c=c(=)           /  \=(=)/")).

@@ -61,10 +61,10 @@ object ControlFlow:
   // not be present during block execution, but it will be returned at
   // the end when the branch coalesces.
   def ifStmt(trueCase: Grid[Instruction], falseCase: Grid[Instruction]): Grid[Instruction] =
-    val trueHeight = trueCase.height
+    val falseHeight = falseCase.height
     val center = falseCase vcat Command.padding vcat trueCase
-    val lhs = Command.hstrip("\\/") vcat Command.padding.repeat(trueHeight - 1).rotateRight vcat Command.hstrip("\\<") vcat Command.hstrip(" \\")
-    val rhs = Command.hstrip("\\/") vcat Command.padding.repeat(trueHeight - 1).rotateRight vcat Command.hstrip(">/") vcat Command.hstrip("/ ")
+    val lhs = Command.hstrip("\\/") vcat Command.padding.repeat(falseHeight - 1).rotateRight vcat Command.hstrip("\\<") vcat Command.hstrip(" \\")
+    val rhs = Command.hstrip("\\/") vcat Command.padding.repeat(falseHeight - 1).rotateRight vcat Command.hstrip(">/") vcat Command.hstrip("/ ")
     lhs hcat center hcat rhs
 
   // Runs setup, then work, then setup in reverse. When setup runs,

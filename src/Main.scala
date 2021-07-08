@@ -11,7 +11,7 @@ object Main:
 
   def main(args: Array[String]) =
 
-    val code = Command.pushNumber(12) ++ Command.pushNumber(2) ++ Algorithm.countFactors
+    val code = Command.pushNumber(4) ++ Command.pushNumber(6) ++ Algorithm.gcd
     val withPrint = Algorithm.program(code ++ Command.thenPrint)
     println(withPrint)
     println(Runner.runCode(withPrint.toString))
