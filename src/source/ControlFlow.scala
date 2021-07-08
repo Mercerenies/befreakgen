@@ -34,10 +34,10 @@ object ControlFlow:
     endCondition: Grid[Instruction],
     body: Grid[Instruction],
   ): Grid[Instruction] =
-    val topRow = Instruction.Down hcat body.mirror
+    val topRow = (body hcat Instruction.Up).rotateLeft.rotateLeft
     val botRow = Instruction.BMirror hcat startCondition hcat endCondition
     val (pTopRow, pBotRow) = padToSameWidth(topRow, botRow)
-    (pTopRow hcat Instruction.Down) vcat (pBotRow hcat Instruction.FMirror)
+    (pTopRow hcat (Command.padding.repeat(topRow.height - 1) vcat Instruction.Down)) vcat (pBotRow hcat Instruction.FMirror)
 
   // Assumes the loop counter is on top of the stack. We enter the
   // loop body in the upper-left going east. At this point, the loop
