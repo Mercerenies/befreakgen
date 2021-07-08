@@ -68,6 +68,31 @@ object Algorithm:
       Instruction.Dup ++ Instruction.Bury,
     ) ++ Instruction.Swap
 
+  // Given A, B on the stack, raise A to the B power.
+  def power: Grid[Instruction] =
+    ControlFlow.withReversed(
+      Command.pushNumber(1) ++ Instruction.Swap ++
+        ControlFlow.countedLoop(
+          Stack.moveToTop(2) ++ Stack.moveToTop(3) ++ Instruction.PushZero ++ Instruction.Swap ++ Instruction.Mul ++ Stack.buryNDown(3) ++ Stack.buryNDown(2)
+        ),
+      Instruction.Over ++ Stack.buryNDown(3)
+    ) ++ Stack.moveToTop(2)
+
+/*
+  // Given N on top of the stack (gcd(10, N) = 1; precondition not
+  // checked), produce A(N).
+  def fullA: Grid[Instruction] =
+    ControlFlow.withReversed(
+      Command.pushNumber(1) ++ Command.pushNumber(2) ++
+        ControlFlow.generalLoop(
+          Command.pushNumber(2) ++ Instruction.Equal ++ Command.popNumber(2),
+          Instruction.Dig ++ Command.pushNumber(1) ++ Instruction.Equal ++ Command.popNumber(1) ++ Instruction.Bury,
+
+        ),
+      _,
+    )
+*/
+
   // The whole program. Starts with @, runs once, and then terminates safely
   def program(body: Grid[Instruction]): Grid[Instruction] =
     val fullBody = Command.padding vcat body
