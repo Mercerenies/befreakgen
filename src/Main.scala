@@ -6,7 +6,7 @@ import source._
 import scala.collection.immutable.HashMap
 import scala.language.implicitConversions
 
-object test:
+object Main:
   import source.ControlFlow.repeat
 
   def main(args: Array[String]) =
