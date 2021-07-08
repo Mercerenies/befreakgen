@@ -71,11 +71,11 @@ object ControlFlow:
   // there will be a single additional value on top of the control
   // stack, which should not be manipulated.
   def withReversed(setup: Grid[Instruction], work: Grid[Instruction]) =
-    val topRow = Instruction.Down ++ Instruction.ReverseMode
-    val fullSetup = Command.padding hcat (topRow vcat setup.rotateLeft.flip)
+    val topRow = Command.padding.repeat(setup.height - 1) ++ Instruction.Down ++ Instruction.ReverseMode
+    val fullSetup = Command.padding hcat (topRow vcat setup.rotateRight)
     val paddedWork = padToWidth(work, 2)
-    val controlRow = Instruction.FMirror ++ Instruction.Up ++ Instruction.ReverseMode ++ Command.padding.repeat(paddedWork.width - 2) ++ Instruction.BMirror
-    val workRow = Instruction.BMirror ++ paddedWork ++ Instruction.FMirror
+    val controlRow = Command.padding.repeat(setup.height - 1) ++ Instruction.FMirror ++ Instruction.Up ++ Instruction.ReverseMode ++ Command.padding.repeat(paddedWork.width - 2) ++ Instruction.BMirror
+    val workRow = Command.padding.repeat(setup.height - 1) ++ Instruction.BMirror ++ paddedWork ++ Instruction.FMirror
     fullSetup vcat controlRow vcat workRow
 
 end ControlFlow
