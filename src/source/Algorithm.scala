@@ -30,6 +30,19 @@ object Algorithm:
       Stack.copyToTop(2) ++ Stack.buryNDown(4),
     ) ++ Stack.moveToTop(2)
 
+  // Takes two values on top of the stack: N and I (I on top). Puts
+  // the number of times I divides into N on top.
+  def countFactors: Grid[Instruction] =
+    ControlFlow.withReversed(
+      Instruction.Over ++ Instruction.PushZero ++
+        ControlFlow.generalLoop(
+          Stack.buryNDown(3) ++ Instruction.Swapd ++ Instruction.Equal ++ Instruction.Swapd ++ Stack.moveToTop(3),
+          Stack.buryNDown(3) ++ Instruction.Swap ++ Instruction.Div ++ Instruction.Swap ++ Command.equalToZero ++ Instruction.ToggleCtrl ++ Instruction.Swap ++ Instruction.Mul ++ Instruction.Swap ++ Stack.moveToTop(3),
+          Instruction.Increment ++ Stack.buryNDown(3) ++ Instruction.Swap ++ Instruction.Div ++ Instruction.Swap ++ Instruction.CtrlToMain ++ Instruction.Swap ++ Instruction.MainToCtrl.repeat(2) ++ Instruction.Swap ++ Stack.moveToTop(3),
+        ),
+      Instruction.Dup ++ Stack.buryNDown(4),
+    ) ++ Stack.moveToTop(2)
+
   // The whole program. Starts with @, runs once, and then terminates safely
   def program(body: Grid[Instruction]): Grid[Instruction] =
     val fullBody = Command.padding vcat body

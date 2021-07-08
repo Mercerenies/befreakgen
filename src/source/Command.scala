@@ -40,6 +40,9 @@ object Command:
   def equalToZero: Grid[Instruction] =
     Instruction.PushZero ++ Instruction.Equal ++ Instruction.PopZero
 
+  def dip(inner: Grid[Instruction]): Grid[Instruction] =
+    Instruction.MainToCtrl ++ inner ++ Instruction.CtrlToMain
+
   def thenPrint: Grid[Instruction] =
     Grid.fromRows(' ', List(raw"(ovs's[)84+84 01%01(v):v `w]v)", raw"  \c=c(=)           /  \=(=)/")).
       map { Instruction(_) }
