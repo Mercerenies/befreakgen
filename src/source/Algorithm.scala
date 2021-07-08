@@ -78,7 +78,6 @@ object Algorithm:
       Instruction.Over ++ Stack.buryNDown(3)
     ) ++ Stack.moveToTop(2)
 
-/*
   // Given N on top of the stack (gcd(10, N) = 1; precondition not
   // checked), produce A(N).
   def fullA: Grid[Instruction] =
@@ -87,11 +86,35 @@ object Algorithm:
         ControlFlow.generalLoop(
           Command.pushNumber(2) ++ Instruction.Equal ++ Command.popNumber(2),
           Instruction.Dig ++ Command.pushNumber(1) ++ Instruction.Equal ++ Command.popNumber(1) ++ Instruction.Bury,
-
+          Instruction.Swapd ++ countFactors ++ power ++ Command.dip(Instruction.Dig) ++ Instruction.Div ++ Command.mainToCtrlDown ++ Command.mainToCtrlDown ++ Instruction.Bury ++ Instruction.PushZero ++ Instruction.MainToCtrl ++ Command.equalToZero ++
+            ControlFlow.ifStmt(
+              Command.padding,
+              Instruction.Swap ++ primeA ++ Instruction.Swap ++ Instruction.Dig ++ Instruction.Decrement ++ power ++ Instruction.PushZero ++ Stack.moveToTop(4) ++ Instruction.Mul ++ Instruction.Swap ++ Stack.moveToTop(5) ++ lcm ++ Stack.buryNDown(6) ++ Command.mainToCtrlDown ++ Command.mainToCtrlDown ++ Command.mainToCtrlDown,
+            ) ++ Instruction.CtrlToMain.repeat(2) ++ Instruction.Swap ++ Instruction.MainToCtrl.repeat(2) ++ Command.mainToCtrlDown ++ Instruction.Swapd ++ Instruction.Increment
         ),
-      _,
+      Instruction.Over ++ Stack.buryNDown(3),
+    ) ++ Instruction.Swap
+
+  // The whole Project Euler #129
+  def fullProgram: Grid[Instruction] =
+    program(
+      Command.pushNumber(1000000) ++
+        ControlFlow.generalLoop(
+          Command.pushNumber(1000000) ++ Instruction.Equal ++ Command.popNumber(1000000),
+          Command.equalToZero,
+          Command.pushNumber(10) ++ gcd ++ Instruction.PushZero ++ Instruction.MainToCtrl ++ Command.pushNumber(1) ++ Instruction.Equal ++ Command.popNumber(1) ++ Command.mainToCtrlDown ++ Command.popNumber(10) ++
+            ControlFlow.ifStmt(
+              fullA ++ Instruction.PushZero ++ Instruction.MainToCtrl ++ Command.pushNumber(1000000) ++ Instruction.GT ++ Command.popNumber(1000000) ++ Command.mainToCtrlDown ++
+                ControlFlow.ifStmt(
+                  Instruction.PushZero ++ Instruction.Decrement,
+                  Command.padding,
+                ),
+              Command.padding,
+            ) ++
+            Instruction.Increment,
+        ) ++
+        Instruction.Swap ++ Command.thenPrint
     )
-*/
 
   // The whole program. Starts with @, runs once, and then terminates safely
   def program(body: Grid[Instruction]): Grid[Instruction] =

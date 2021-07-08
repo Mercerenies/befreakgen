@@ -37,7 +37,14 @@ object ControlFlow:
     val topRow = (body hcat Instruction.Up).rotateLeft.rotateLeft
     val botRow = Instruction.BMirror hcat startCondition hcat endCondition
     val (pTopRow, pBotRow) = padToSameWidth(topRow, botRow)
-    (pTopRow hcat (Command.padding.repeat(topRow.height - 1) vcat Instruction.Down)) vcat (pBotRow hcat Instruction.FMirror)
+    val base = (pTopRow hcat (Command.padding.repeat(topRow.height - 1).rotateRight vcat Instruction.Down)) vcat (pBotRow hcat Instruction.FMirror)
+    if topRow.height == 1 then
+      base
+    else
+      // Add a shim
+      val lhs = Instruction.BMirror vcat Command.padding.repeat(topRow.height - 2).rotateRight vcat Instruction.BMirror
+      val rhs = Instruction.FMirror vcat Command.padding.repeat(topRow.height - 2).rotateRight vcat Instruction.FMirror
+      lhs hcat base hcat rhs
 
   // Assumes the loop counter is on top of the stack. We enter the
   // loop body in the upper-left going east. At this point, the loop
