@@ -11,7 +11,7 @@ object Main:
 
   def main(args: Array[String]) =
 
-    val code = Command.pushNumber(4) ++ Command.pushNumber(6) ++ Algorithm.gcd
+    val code = Command.pushNumber(101) ++ Algorithm.primeA
     val withPrint = Algorithm.program(code ++ Command.thenPrint)
     println(withPrint)
     println(Runner.runCode(withPrint.toString))

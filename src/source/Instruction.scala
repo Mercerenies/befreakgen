@@ -106,8 +106,12 @@ object Instruction:
 
     def rotateRight: Grid[Instruction] = grid.rawRotateRight.map(_.rotateRight)
 
-    def mirror: Grid[Instruction] = grid.rawMirror.map(_.mirror)
+    // mirror and flip have been removed since they don't actually
+    // maintain all of the invariants of the program (conditional
+    // branches end up getting their semantics reversed, sadly)
 
-    def flip: Grid[Instruction] = grid.rawFlip.map(_.flip)
+    // def mirror: Grid[Instruction] = grid.rawMirror.map(_.mirror)
+
+    // def flip: Grid[Instruction] = grid.rawFlip.map(_.flip)
 
 end Instruction
